@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Detect Chinese</title>
+    <script src="../index.js"></script>  <!-- Import Detect Chinese -->
+    <style>
+
+*, ::before, ::after { box-sizing: border-box; }
+html { font-family: sans-serif; text-decoration-skip-ink: none; cursor: default; }
+
+dt { margin: 2rem 0 .5rem; font-weight: bold; }
+dd { margin: 0 0 0 1rem; }
+strong { color: #f00; }
+pre { border: 1px solid #ccc; padding: .5rem; max-height: 8rem; overflow: scroll; }
+
+    </style>
+    <script>
+
+document.addEventListener('DOMContentLoaded', () => {
+  if(window.detectChinese == null) {
+    document.getElementById('results').innerHTML = '<strong>エラー : window.detectChinese が存在しません</strong>';
+    return;
+  }
+  
+  /** テストしたい文字列 */
+  const patterns = [
+    { name: '日本語でよく使う文字列', value: 'あいうえおー、アイウエオ～。ｶｷｸｹｺ！？ﾊﾞﾋﾞﾌﾞﾍﾞﾎﾞ!?ﾊﾟﾋﾟﾌﾟﾍﾟﾎﾟ・，．,.' },
+    { name: '日本語で使う漢字'      , value: '𠮷野家吉㍑㍍㍻㍼感謝億劫' },  // TODO : 既知の問題 : `𠮷` が漢字として判定されない
+    { name: '中国語の文章'          , value: '我开动了, 多谢款待 简体字' },
+    { name: 'ハングル'              , value: '한글 조선글' },
+    { name: 'キリル文字'            , value: 'русский язык' },
+    { name: 'アラビア文字'          , value: 'اللغة العربية' },
+    { name: '空文字'                , value: '' }
+  ];
+  
+  let html = '<dl>';
+  patterns.forEach((pattern) => {
+    const detected = window.detectChinese.detect(pattern.value);
+    html += `<dt>${pattern.name} : [${pattern.value}] --> <strong>${detected.language}</strong></dt>`
+         +  `<dd><pre>${JSON.stringify(detected, null, '  ')}</pre></dd>`;
+  });
+  html += '</dl>';
+  document.getElementById('results').innerHTML = html;
+});
+
+    </script>
+  </head>
+  <body>
+
+<h1>Detect Chinese</h1>
+<div id="results">ココに結果を出力します</div>
+<hr>
+
+  </body>
+</html>

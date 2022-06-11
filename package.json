@@ -1,0 +1,23 @@
+{
+  "name": "@neos21/detect-chinese",
+  "version": "0.0.0",
+  "description": "[WIP] Detect Chinese",
+  "main": "index.js",
+  "bin": {
+    "detect-chinese": "bin.js"
+  },
+  "author": "Neo <neos21@gmail.com> (https://neos21.net/)",
+  "license": "MIT",
+  "homepage": "https://github.com/Neos21/detect-chinese#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Neos21/detect-chinese.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Neos21/detect-chinese/issues"
+  },
+  "funding": {
+    "type": "github",
+    "url": "https://github.com/sponsors/Neos21"
+  }
+}
