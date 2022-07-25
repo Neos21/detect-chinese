@@ -10,7 +10,7 @@ const fs   = require('fs');
 const path = require('path');
 
 // Input
-const unihanReadingsFilePath = path.resolve(__dirname, '../unihan/Unihan_Readings.txt');
+const unihanReadingsFilePath = path.resolve(__dirname, './unihan/Unihan_Readings.txt');
 // Output
 const extractCodePointsJapaneseFilePath = path.resolve(__dirname, './extract-code-points-japanese.txt');
 const extractCodePointsChineseFilePath  = path.resolve(__dirname, './extract-code-points-chinese.txt' );

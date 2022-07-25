@@ -1,0 +1,13 @@
+.DS_Store
+Thumbs.db
+
+*.log
+
+# For GitHub Pages
+dist/
+
+# For .npmignore
+.github/workflows/
+sandboxes/
+scripts/
+tests/

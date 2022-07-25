@@ -2,3 +2,6 @@
 Thumbs.db
 
 *.log
+
+# For GitHub Pages
+dist/

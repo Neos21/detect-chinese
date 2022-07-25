@@ -1,10 +1,13 @@
 {
   "name": "@neos21/detect-chinese",
   "version": "0.0.0",
-  "description": "[WIP] Detect Chinese",
+  "description": "Detect Chinese",
   "main": "index.js",
   "bin": {
     "detect-chinese": "bin.js"
+  },
+  "scripts": {
+    "build": "node ./scripts/build.js"
   },
   "author": "Neo <neos21@gmail.com> (https://neos21.net/)",
   "license": "MIT",
