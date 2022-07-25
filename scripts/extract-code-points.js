@@ -35,10 +35,10 @@ unihanReadingsLines.forEach((line) => {
   const columns = line.split('\t');
   const codePoint = columns[0];
   const fieldName = columns[1];
-  if(fieldName === 'kJapaneseKun') japaneseKun.push(codePoint.replace('U+', '\\u'));
-  if(fieldName === 'kJapaneseOn' ) japaneseOn .push(codePoint.replace('U+', '\\u'));
-  if(fieldName === 'kMandarin'   ) mandarin   .push(codePoint.replace('U+', '\\u'));
-  if(fieldName === 'kCantonese'  ) cantonese  .push(codePoint.replace('U+', '\\u'));
+  if(fieldName === 'kJapaneseKun') japaneseKun.push(parseInt(codePoint.slice(2), 16));
+  if(fieldName === 'kJapaneseOn' ) japaneseOn .push(parseInt(codePoint.slice(2), 16));
+  if(fieldName === 'kMandarin'   ) mandarin   .push(parseInt(codePoint.slice(2), 16));
+  if(fieldName === 'kCantonese'  ) cantonese  .push(parseInt(codePoint.slice(2), 16));
   // TODO : 特定した Code Point について Unihan_Variants.txt の kSpoofingVariant として異体が定義されていれば
   //        その異体字も一覧に追加するべきだろうか？ ('吉' は Unihan_Readings.txt に登場するが '𠮷' は登場せず特定できない問題がある)
 });
@@ -56,7 +56,29 @@ console.log(new Date().toISOString(), `  Japanese : ${japaneseKun.length + japan
 console.log(new Date().toISOString(), `  Chinese  : ${mandarin   .length + cantonese .length} => ${chinese .length}`);
 
 // ファイルに書き込む : `[\u0000\u1111]` といった形式にする
-fs.writeFileSync(extractCodePointsJapaneseFilePath, `[${japanese.join('')}]`, 'utf-8');
-fs.writeFileSync(extractCodePointsChineseFilePath , `[${chinese .join('')}]`, 'utf-8');
+// 連続するものは[\u2000-\u2003]のように結合する
+
+const buildString = ([buildString, previousBuildedCode, previousCode]) => (
+  previousBuildedCode === previousCode
+  ? `${buildString}\\u${previousBuildedCode.toString(16)}`
+  : `${buildString}\\u${previousBuildedCode.toString(16)}${previousCode - previousBuildedCode === 1 ? '' : '-'}\\u${previousCode.toString(16)}`
+);
+
+const genRegex = (array) => {
+  const merge = array.reduce((previous, currentPoint) => {
+    // [buildString, previousBuildedCode, previousCode]
+    if(previous[1] < 0) return [previous[0], currentPoint, currentPoint];
+    if(currentPoint - previous[2] === 1) return [previous[0], previous[1], currentPoint];
+    return [buildString(previous),
+      currentPoint,
+      currentPoint
+    ]
+  }, ["", -1, -1])
+  if(merge[1] === -1) return "";
+  return buildString(merge);
+};
+
+fs.writeFileSync(extractCodePointsJapaneseFilePath, `[${genRegex(japanese)}]`, 'utf-8');
+fs.writeFileSync(extractCodePointsChineseFilePath , `[${genRegex(chinese )}]`, 'utf-8');
 
 console.log(new Date().toISOString(), 'Finished');
