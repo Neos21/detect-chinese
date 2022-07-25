@@ -3,11 +3,10 @@ Thumbs.db
 
 *.log
 
-# For GitHub Pages
-dist/
-
 # For .npmignore
+.nojekyll
 .github/workflows/
+dist/
 sandboxes/
 scripts/
 tests/

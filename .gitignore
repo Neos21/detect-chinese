@@ -3,5 +3,4 @@ Thumbs.db
 
 *.log
 
-# For GitHub Pages
-dist/
+# ./dist/ は管理不要だがココに書いてしまうと Deploy gh-pages が失敗するので書かないでおく

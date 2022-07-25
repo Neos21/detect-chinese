@@ -1,6 +1,6 @@
 # @neos21/detect-chinese : Detect Chinese
 
-[![NPM Version](https://img.shields.io/npm/v/@neos21/detect-chinese.svg)](https://www.npmjs.com/package/@neos21/detect-chinese)
+[![NPM Version](https://img.shields.io/npm/v/@neos21/detect-chinese.svg)](https://www.npmjs.com/package/@neos21/detect-chinese) [![GPR Version](https://img.shields.io/github/package-json/v/neos21/detect-chinese?label=github)](https://github.com/Neos21/detect-chinese/packages/1557727)
 
 文字列に「中国語にしか使われない漢字が含まれているかどうか」を調べることで、対象の文字列が「中国語かどうか」を判定する。
 
