@@ -4,7 +4,7 @@ const path = require('path');
 console.log(new Date().toISOString(), 'Build Start');
 
 const distDirectoryPath = path.resolve(__dirname, '../dist');
-if(!fs.existsSync(distDirectoryPath)) fs.rmdirSync(distDirectoryPath, { recursive: true });
+if(fs.existsSync(distDirectoryPath)) fs.rmdirSync(distDirectoryPath, { recursive: true });
 fs.mkdirSync(distDirectoryPath);
 
 // JS
