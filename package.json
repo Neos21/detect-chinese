@@ -6,7 +6,6 @@
   "bin": {
     "detect-chinese": "bin.js"
   },
-  "types": "type.d.ts",
   "author": "Neo <neos21@gmail.com> (https://neos21.net/)",
   "license": "MIT",
   "homepage": "https://github.com/Neos21/detect-chinese#readme",
