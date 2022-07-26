@@ -35,10 +35,10 @@ unihanReadingsLines.forEach((line) => {
   const columns = line.split('\t');
   const codePoint = columns[0];
   const fieldName = columns[1];
-  if(fieldName === 'kJapaneseKun') japaneseKun.push(codePoint.replace('U+', '\\u'));
-  if(fieldName === 'kJapaneseOn' ) japaneseOn .push(codePoint.replace('U+', '\\u'));
-  if(fieldName === 'kMandarin'   ) mandarin   .push(codePoint.replace('U+', '\\u'));
-  if(fieldName === 'kCantonese'  ) cantonese  .push(codePoint.replace('U+', '\\u'));
+  if(fieldName === 'kJapaneseKun') japaneseKun.push(parseInt(codePoint.slice(2), 16));
+  if(fieldName === 'kJapaneseOn' ) japaneseOn .push(parseInt(codePoint.slice(2), 16));
+  if(fieldName === 'kMandarin'   ) mandarin   .push(parseInt(codePoint.slice(2), 16));
+  if(fieldName === 'kCantonese'  ) cantonese  .push(parseInt(codePoint.slice(2), 16));
   // TODO : 特定した Code Point について Unihan_Variants.txt の kSpoofingVariant として異体が定義されていれば
   //        その異体字も一覧に追加するべきだろうか？ ('吉' は Unihan_Readings.txt に登場するが '𠮷' は登場せず特定できない問題がある)
 });
@@ -49,14 +49,44 @@ console.log(new Date().toISOString(), `  Mandarin     : ${mandarin   .length}`);
 console.log(new Date().toISOString(), `  Cantonese    : ${cantonese  .length}`);
 
 // 日本語訓読みと日本語音読み、北京語読みと広東語読みのペアで重複する Unicode Code Point は一つにする
-const japanese = Array.from(new Set([...japaneseKun, ...japaneseOn]));
-const chinese  = Array.from(new Set([...mandarin   , ...cantonese ]));
+const japanese = Array.from(new Set([...japaneseKun, ...japaneseOn])).sort((a,b) => a - b);
+const chinese  = Array.from(new Set([...mandarin   , ...cantonese ])).sort((a,b) => a - b);
 console.log(new Date().toISOString(), 'Duplicates Removed');
 console.log(new Date().toISOString(), `  Japanese : ${japaneseKun.length + japaneseOn.length} => ${japanese.length}`);
 console.log(new Date().toISOString(), `  Chinese  : ${mandarin   .length + cantonese .length} => ${chinese .length}`);
 
+console.log(japanese.slice(0,40))
+
 // ファイルに書き込む : `[\u0000\u1111]` といった形式にする
-fs.writeFileSync(extractCodePointsJapaneseFilePath, `[${japanese.join('')}]`, 'utf-8');
-fs.writeFileSync(extractCodePointsChineseFilePath , `[${chinese .join('')}]`, 'utf-8');
+// 連続するものは[\u2000-\u2003]のように結合する
+
+const codePoint2UnicodeMatch = (code) => {
+  const char = code.toString(16)
+  return char.length > 4 ? `\\u{${char}}` : `\\u${char}`
+}
+
+const buildString = ([buildString, previousBuildedCode, previousCode]) => (
+  previousBuildedCode === previousCode
+  ? `${buildString}${codePoint2UnicodeMatch(previousBuildedCode)}`
+  : `${buildString}${codePoint2UnicodeMatch(previousBuildedCode)}${previousCode - previousBuildedCode === 1 ? '' : '-'}${codePoint2UnicodeMatch(previousCode)}`
+);
+
+const genRegex = (array) => {
+  const merge = array.reduce((previous, currentPoint) => {
+    // [buildString, previousBuildedCode, previousCode]
+    if(previous[1] < 0) return [previous[0], currentPoint, currentPoint];
+    if(currentPoint - previous[2] === 1) return [previous[0], previous[1], currentPoint];
+    return [buildString(previous),
+      currentPoint,
+      currentPoint
+    ]
+  }, ["", -1, -1])
+  if(merge[1] === -1) return "";
+  return buildString(merge);
+};
+
+fs.writeFileSync(extractCodePointsJapaneseFilePath, `[${genRegex(japanese)}]`, 'utf-8');
+fs.writeFileSync(extractCodePointsChineseFilePath , `[${genRegex(chinese )}]`, 'utf-8');
+
 
 console.log(new Date().toISOString(), 'Finished');
