@@ -1,6 +1,6 @@
 {
   "name": "@neos21/detect-chinese",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Detect Chinese",
   "main": "index.js",
   "bin": {
@@ -8,7 +8,9 @@
   },
   "types": "./type.d.ts",
   "scripts": {
-    "build": "node ./scripts/build.js"
+    "start": "node ./bin.js",
+    "build": "node ./scripts/build.js",
+    "test" : "node ./tests/node.js"
   },
   "author": "Neo <neos21@gmail.com> (https://neos21.net/)",
   "license": "MIT",

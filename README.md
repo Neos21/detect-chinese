@@ -84,6 +84,11 @@ if(isIncludesChinese) {
 ```
 
 
+## Thanks Contributors!
+
+- [GunseiKPaseri](https://github.com/GunseiKPaseri)
+
+
 ## Links
 
 - [Neo's World](https://neos21.net/)

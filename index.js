@@ -61,9 +61,9 @@
     const result = {
       language,            // 判定結果
       text,                // 元の文字列
-      japaneseCharacters,  // 日本語と判定した文字列
-      chineseCharacters,   // 中国語と判定した文字列
-      otherCharacters      // それ以外の言語の文字列
+      japaneseCharacters,  // 日本語と判定した文字列の配列
+      chineseCharacters,   // 中国語と判定した文字列の配列
+      otherCharacters      // それ以外の言語の文字列の配列
     };
     return result;
   };

@@ -49,26 +49,24 @@ console.log(new Date().toISOString(), `  Mandarin     : ${mandarin   .length}`);
 console.log(new Date().toISOString(), `  Cantonese    : ${cantonese  .length}`);
 
 // 日本語訓読みと日本語音読み、北京語読みと広東語読みのペアで重複する Unicode Code Point は一つにする
-const japanese = Array.from(new Set([...japaneseKun, ...japaneseOn])).sort((a,b) => a - b);
-const chinese  = Array.from(new Set([...mandarin   , ...cantonese ])).sort((a,b) => a - b);
+const japanese = Array.from(new Set([...japaneseKun, ...japaneseOn])).sort((a, b) => a - b);
+const chinese  = Array.from(new Set([...mandarin   , ...cantonese ])).sort((a, b) => a - b);
 console.log(new Date().toISOString(), 'Duplicates Removed');
 console.log(new Date().toISOString(), `  Japanese : ${japaneseKun.length + japaneseOn.length} => ${japanese.length}`);
 console.log(new Date().toISOString(), `  Chinese  : ${mandarin   .length + cantonese .length} => ${chinese .length}`);
 
-console.log(japanese.slice(0,40))
-
 // ファイルに書き込む : `[\u0000\u1111]` といった形式にする
-// 連続するものは[\u2000-\u2003]のように結合する
+// 連続するものは `[\u2000-\u2003]` のように結合する
 
 const codePoint2UnicodeMatch = (code) => {
-  const char = code.toString(16)
-  return char.length > 4 ? `\\u{${char}}` : `\\u${char}`
-}
+  const char = code.toString(16);
+  return char.length > 4 ? `\\u{${char}}` : `\\u${char}`;
+};
 
 const buildString = ([buildString, previousBuildedCode, previousCode]) => (
   previousBuildedCode === previousCode
-  ? `${buildString}${codePoint2UnicodeMatch(previousBuildedCode)}`
-  : `${buildString}${codePoint2UnicodeMatch(previousBuildedCode)}${previousCode - previousBuildedCode === 1 ? '' : '-'}${codePoint2UnicodeMatch(previousCode)}`
+    ? `${buildString}${codePoint2UnicodeMatch(previousBuildedCode)}`
+    : `${buildString}${codePoint2UnicodeMatch(previousBuildedCode)}${previousCode - previousBuildedCode === 1 ? '' : '-'}${codePoint2UnicodeMatch(previousCode)}`
 );
 
 const genRegex = (array) => {
@@ -76,17 +74,17 @@ const genRegex = (array) => {
     // [buildString, previousBuildedCode, previousCode]
     if(previous[1] < 0) return [previous[0], currentPoint, currentPoint];
     if(currentPoint - previous[2] === 1) return [previous[0], previous[1], currentPoint];
-    return [buildString(previous),
+    return [
+      buildString(previous),
       currentPoint,
       currentPoint
-    ]
-  }, ["", -1, -1])
-  if(merge[1] === -1) return "";
+    ];
+  }, ['', -1, -1]);
+  if(merge[1] === -1) return '';
   return buildString(merge);
 };
 
 fs.writeFileSync(extractCodePointsJapaneseFilePath, `[${genRegex(japanese)}]`, 'utf-8');
 fs.writeFileSync(extractCodePointsChineseFilePath , `[${genRegex(chinese )}]`, 'utf-8');
-
 
 console.log(new Date().toISOString(), 'Finished');
