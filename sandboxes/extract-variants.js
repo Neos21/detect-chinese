@@ -11,7 +11,7 @@ const fs   = require('fs');
 const path = require('path');
 
 // Input
-const unihanVariantsFilePath = path.resolve(__dirname, '../unihan/Unihan_Variants.txt');
+const unihanVariantsFilePath = path.resolve(__dirname, '../scripts/unihan/Unihan_Variants.txt');
 // Output
 const extractVariantsFilePath = path.resolve(__dirname, './extract-variants.txt');
 

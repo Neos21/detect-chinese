@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Google Search Console -->
+    <meta name="google-site-verification" content="ls7kuvIKSqVa_dcixqKvFwl393swvYMkHCkG-xtlCj0">
+    <title>@neos21/detect-chinese : Detect Chinese</title>
+    <link rel="icon" href="https://neos21.github.io/favicon.ico">
+    <!-- Global Site Tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-LP3ZQV2R3M"></script>
+    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-LP3ZQV2R3M');gtag('config','UA-106501-6');</script>
+    <!-- Google AdSense -->
+    <script data-ad-client="ca-pub-6475907504235292" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <style>
+
+*, ::before, ::after { box-sizing: border-box; }
+html { font-family: sans-serif; text-decoration-skip-ink: none; cursor: default; }
+#form { display: grid; grid-template-columns: 1fr auto; column-gap: .5rem; }
+input, button { font-size: 16px; }
+input { width: 100%; }
+strong { color: #f00; }
+textarea { margin-top: .5rem; width: 100%; height: 22rem; resize: vertical; }
+hr { margin: 2rem 0; height: 0; border: 0; border-top: 1px solid #999; }
+
+    </style>
+    <script src="../index.js"></script>  <!-- Import Detect Chinese -->
+    <script>
+
+document.addEventListener('DOMContentLoaded', () => {
+  const result = document.getElementById('result');
+  if(window.detectChinese == null) {
+    result.innerHTML = '<strong>エラー : window.detectChinese が存在しません</strong>';
+    return;
+  }
+  
+  const exec = () => {
+    try {
+      const text = document.getElementById('text').value;  // 必ず string 型になるので型不正や null・undefined による例外は発生しない
+      const detected = window.detectChinese.detect(text);
+      
+      const resultTexts = [
+        { raw: 'cn'   , text: 'cn = 中国語です … 中国語文字を含んでいます' },
+        { raw: 'ja'   , text: 'ja = 日本語です … 中国語文字を含んでいません。日本語文字を含んでいます' },
+        { raw: 'OTHER', text: 'OTHER = 中国語・日本語以外の言語です … 中国語文字・日本語文字を含んでいません' },
+        { raw: 'NONE' , text: 'NONE = 空文字です' }
+      ];
+      const resultText = resultTexts.find((resultText) => resultText.raw === detected.language);
+      if(resultText == null) throw new Error('未定義の言語');
+      
+      result.innerHTML = `
+        <div><b>入力値 : </b>[${text}]</div>
+        <div><b>判定結果 : </b><strong>${resultText.text}</strong></div>
+        <div><textarea readonly>${JSON.stringify(detected, null, '  ')}</textarea></div>
+      `;
+    }
+    catch(error) {
+      console.error('Unexpected Error', error);
+      result.innerHTML = '<strong>エラー : 予期しないエラーが発生しました。開発者コンソールを確認してください</strong>';
+    }
+  };
+  
+  exec();
+  document.getElementById('exec').addEventListener('click', exec);
+});
+
+    </script>
+  </head>
+  <body>
+
+<h1>@neos21/detect-chinese : Detect Chinese</h1>
+<p>
+  <a href="https://www.npmjs.com/package/@neos21/detect-chinese"><img src="https://img.shields.io/npm/v/@neos21/detect-chinese.svg" alt="NPM Version" title="NPM Version"></a>
+  <a href="https://github.com/Neos21/detect-chinese/packages/1557727"><img src="https://img.shields.io/github/package-json/v/neos21/detect-chinese?label=github" alt="GPR Version" title="GPR Version"></a>
+</p>
+<p id="form">
+  <input type="text" id="text" value="こんにちは。哈罗" placeholder="ココに文字列を入力してください">
+  <button type="button" id="exec">Exec</button>
+</p>
+<div id="result">ココに結果を出力します。</div>
+
+<hr>
+<ul>
+  <li><a href="https://neos21.net/">Neo's World</a></li>
+  <li><a href="https://github.com/Neos21/">GitHub - Neos21</a></li>
+  <li><a href="https://github.com/Neos21/detect-chinese">GitHub - detect-chinese</a></li>
+  <li><a href="https://neos21.github.io/detect-chinese">GitHub Pages - @neos21/detect-chinese : Detect Chinese</a></li>
+  <li><a href="https://www.npmjs.com/package/@neos21/detect-chinese">npm - @neos21/detect-chinese</a></li>
+</ul>
+
+  </body>
+</html>

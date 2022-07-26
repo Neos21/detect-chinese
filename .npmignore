@@ -1,0 +1,12 @@
+.DS_Store
+Thumbs.db
+
+*.log
+
+# For .npmignore
+.nojekyll
+.github/workflows/
+dist/
+sandboxes/
+scripts/
+tests/

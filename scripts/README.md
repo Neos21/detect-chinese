@@ -1,6 +1,6 @@
 # Detect Chinese : Scripts
 
-ライブラリ作成に必要なスクリプト。
+本ライブラリの作成に必要なスクリプト。
 
 ```bash
 $ node ./scripts/extract-code-points.js

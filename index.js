@@ -35,11 +35,8 @@
    * @return {Object} 結果オブジェクト
    */
   detectChinese.detect = (text) => {
-    // TODO : 引数 `text` の null チェック・型チェック → 例外スロー
-    // TODO : 負荷軽減のために1文字ずつ判定せずとも処理できるパターンを実装しても良いかもしれない
-    //        - 空文字の場合 → 「なし」として終了する
-    //        - `regExpHiraKanaUnicodeCodePoints` を含んでいる → その時点で「日本語の文字列」とみなし1文字ずつの判定をしない
-    //        - `(/^\P{scx=Han}+$/u).test(text)` : 漢字を一切含まない → その時点で「その他の言語の文字列」とみなして終了する
+    if(text == null) throw new Error('The Argument Is Null');
+    if(Object.prototype.toString.call(text) !== '[object String]') throw new Error('The Argument Is Not A String');
     
     const japaneseCharacters = [];  // 日本語で使う漢字と判断した文字 (ひらがな・カタカナと関連文字も含まれる)
     const chineseCharacters  = [];  // 中国語で使う漢字と判断した文字
@@ -51,7 +48,7 @@
       if(detectChinese.regExpHiraKanaUnicodeCodePoints.test(character)) return japaneseCharacters.push(character);  // ひらがな・カタカナ関連
       if(detectChinese.regExpJapaneseUnicodeCodePoints.test(character)) return japaneseCharacters.push(character);  // 日本語で使う漢字
       if(detectChinese.regExpChineseUnicodeCodePoints .test(character)) return chineseCharacters .push(character);  // 中国語で使う漢字
-      return otherCharacters.push(character);                                                         // その他文字
+      return otherCharacters.push(character);                                                                       // その他文字
     });
     
     // 判定結果
@@ -62,15 +59,11 @@
     
     // 結果オブジェクトを返す
     const result = {
-      language,                                  // 判定結果
-      text,                                      // 元の文字列
-      japaneseCharacters,                        // 日本語と判定した文字列
-      chineseCharacters,                         // 中国語と判定した文字列
-      otherCharacters,                           // それ以外の言語の文字列
-      allCount     : characters        .length,  // 元の文字列の文字数
-      japaneseCount: japaneseCharacters.length,  // 日本語と判定した文字数
-      chineseCount : chineseCharacters .length,  // 中国語と判定した文字数
-      otherCount   : otherCharacters   .length   // それ以外の言語の文字数
+      language,            // 判定結果
+      text,                // 元の文字列
+      japaneseCharacters,  // 日本語と判定した文字列
+      chineseCharacters,   // 中国語と判定した文字列
+      otherCharacters      // それ以外の言語の文字列
     };
     return result;
   };
