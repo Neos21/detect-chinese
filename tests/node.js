@@ -8,6 +8,8 @@ const patterns = [
   { value: 'Hello'                  , expected: 'OTHER' },
   { value: 'こんにちは。Hello. 哈罗', expected: 'cn'    },
   { value: 'こんにちは。Hello.'     , expected: 'ja'    },
+  { value: '𣏾'                     , expected: 'ja'    },
+  { value: '𠀼'                     , expected: 'cn'    },
   { value: ''                       , expected: 'NONE'  },
   { value: null                     , expected: 'Error: The Argument Is Null'         },
   { value: 1                        , expected: 'Error: The Argument Is Not A String' }
